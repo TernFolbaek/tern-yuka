@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Calculator, Atom, Code, Brain } from 'lucide-react';
+import React, {useState} from 'react';
+import {ChevronLeft, ChevronRight, Calculator, Atom, Code, Brain} from 'lucide-react';
 
 interface SidebarProps {
     isOpen: boolean;
     onToggle: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
     const toggleGroup = (groupId: string) => {
@@ -72,69 +72,75 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
     ];
 
     return (
-        <div className={`fixed left-0 top-0 h-full bg-black text-white transition-all duration-300 ease-in-out z-50 overflow-hidden ${
-            isOpen ? 'w-80' : 'w-0'
-        }`}>
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-800 min-w-16">
-                <div className={`flex items-center gap-3 ${isOpen ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200`}>
-                    <h1 className="text-lg font-semibold whitespace-nowrap">Learning Hub</h1>
+        <>
+            {/* Floating Toggle Button - Always Visible */}
+            <button
+                onClick={onToggle}
+                className={`fixed top-4 z-50 p-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-300 ease-in-out shadow-lg ${
+                    isOpen ? 'left-[250px]' : 'left-4'
+                }`}
+            >
+                {!isOpen && (<ChevronRight className="w-5 h-5"/>)}
+            </button>
+
+            {/* Sidebar */}
+            <div
+                className={`fixed left-0 top-0 h-full bg-black text-white transition-all duration-300 ease-in-out z-40 overflow-hidden ${
+                    isOpen ? 'w-80' : 'w-0'
+                }`}>
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-800">
+                    <div className="w-full flex items-center justify-between">
+                        <h1 className="text-lg font-semibold whitespace-nowrap">Tern Yuka</h1>
+                        {isOpen && (
+                            <ChevronLeft onClick={onToggle} className="hover:cursor-pointer w-5 h-5"/>
+                        )}
+                    </div>
                 </div>
-                <button
-                    onClick={onToggle}
-                    className="p-2 rounded-lg hover:bg-gray-800 transition-colors flex-shrink-0"
-                >
-                    {isOpen ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                </button>
-            </div>
 
-            {/* Navigation */}
-            <nav className="p-4 space-y-2 overflow-y-auto h-full pb-20">
-                {learningAreas.map((area) => {
-                    const Icon = area.icon;
-                    const isExpanded = expandedGroups[area.id];
+                {/* Navigation */}
+                <nav className="p-4 space-y-2 overflow-y-auto h-full pb-20">
+                    {learningAreas.map((area) => {
+                        const Icon = area.icon;
+                        const isExpanded = expandedGroups[area.id];
 
-                    return (
-                        <div key={area.id} className="space-y-1">
-                            {/* Group Header */}
-                            <button
-                                onClick={() => isOpen && toggleGroup(area.id)}
-                                className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors ${
-                                    !isOpen ? 'justify-center' : 'justify-between'
-                                }`}
-                                title={!isOpen ? area.title : ''}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Icon className="w-5 h-5 flex-shrink-0" />
-                                    <span className={`font-medium ${isOpen ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200 whitespace-nowrap`}>
+                        return (
+                            <div key={area.id} className="space-y-1">
+                                {/* Group Header */}
+                                <button
+                                    onClick={() => toggleGroup(area.id)}
+                                    className="w-full flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Icon className="w-5 h-5 flex-shrink-0"/>
+                                        <span className="font-medium whitespace-nowrap">
                                         {area.title}
                                     </span>
-                                </div>
-                                {isOpen && (
+                                    </div>
                                     <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${
                                         isExpanded ? 'rotate-90' : ''
-                                    }`} />
-                                )}
-                            </button>
+                                    }`}/>
+                                </button>
 
-                            {/* Group Items */}
-                            {isOpen && isExpanded && (
-                                <div className="ml-8 space-y-1 animate-in slide-in-from-top-2 duration-200">
-                                    {area.items.map((item, index) => (
-                                        <button
-                                            key={index}
-                                            className="w-full text-left p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-sm whitespace-nowrap"
-                                        >
-                                            {item}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
-            </nav>
-        </div>
+                                {/* Group Items */}
+                                {isExpanded && (
+                                    <div className="ml-8 space-y-1 animate-in slide-in-from-top-2 duration-200">
+                                        {area.items.map((item, index) => (
+                                            <button
+                                                key={index}
+                                                className="w-full text-left p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-sm whitespace-nowrap"
+                                            >
+                                                {item}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </nav>
+            </div>
+        </>
     );
 };
 
