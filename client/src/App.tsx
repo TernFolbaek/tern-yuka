@@ -1,55 +1,32 @@
-import HomePage from './components/HomePage/HomePage'
-import {createTheme, responsiveFontSizes, ThemeProvider} from '@mui/material'
+import {useState, } from "react";
+import Sidebar from './components/Navbar/Sidebar';
+const App: React.FC = () => {
 
-let theme = createTheme(
-    {
-        palette: {
-            primary: {
-                main: '#2c91f4',
-            },
-            secondary: {
-                main: '#f50000',
-            },
-            error: {
-                main: '#f49536',
-            },
-            background: {
-                default: 'white',
-            },
-        },
-        typography: {
-            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-            h1: {
-                fontWeight: 700,
-            },
-            h2: {
-                fontWeight: 700,
-            },
-            h3: {
-                fontWeight: 600,
-            },
-            h4: {
-                fontWeight: 600,
-            },
-            h5: {
-                fontWeight: 500,
-            },
-            h6: {
-                fontWeight: 500,
-            },
-        },
-    }
-)
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
-theme = responsiveFontSizes(theme);
-
-const App = () => {
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     return (
-        <ThemeProvider theme={theme}>
-            <HomePage/>
-        </ThemeProvider>
+        <div className="min-h-screen bg-white">
+            <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+            {/* Main Content */}
+            <div className={`transition-all duration-300 ease-in-out ${
+                sidebarOpen ? 'ml-80' : 'ml-16'
+            }`}>
+                <div className="p-8">
+                    <div className="max-w-4xl mx-auto">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Learning Hub Dashboard</h1>
+                        <p className="text-gray-600">
+                            Welcome to your learning hub! Use the sidebar to navigate between different subjects and topics.
+                            Click the toggle button to collapse or expand the sidebar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
-}
+};
 
 export default App;
