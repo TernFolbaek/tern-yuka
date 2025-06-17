@@ -2,8 +2,7 @@ import {Github, ExternalLink, Star, GitFork} from 'lucide-react';
 
 const Home: React.FC = () => {
     return (
-        <div className="min-h-screen bg-white">
-            <div className="p-12">
+        <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">Hello :)</h1>
                 <p className="text-gray-600">
                     Welcome to something! Where when I learn about something, I might write about so called -
@@ -42,8 +41,6 @@ const Home: React.FC = () => {
                             </span>
                     </div>
                 </a>
-
-            </div>
         </div>
     );
 };

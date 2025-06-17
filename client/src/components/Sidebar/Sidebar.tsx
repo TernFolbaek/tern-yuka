@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ChevronLeft, ChevronRight, Calculator, Atom, Code, Brain} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -44,31 +44,35 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
             icon: Brain,
             items: [
                 {
-                    id: 'supervised-learning',
+                    id: 'machine-learning/supervised-learning',
                     title: 'Supervised Learning',
                     items: []
                 },
                 {
-                    id: 'unsupervised-learning',
+                    id: 'machine-learning/unsupervised-learning',
                     title: 'Unsupervised Learning',
                     items: []
                 },
-                'Gradient Descent'
+                {
+                    id: 'machine-learning/gradient-descent',
+                    title: 'Gradient descent',
+                },
             ]
         }
     ];
 
     const renderItems = (items: any[], level: number = 0) => {
         return items.map((item, index) => {
-            if (typeof item === 'string') {
+            if (!item.items) {
                 // Leaf item
                 return (
                     <button
                         key={index}
+                        onClick={() => {navigate(item.id)}}
                         className={`w-full text-left p-2 rounded-md text-gray-800 hover:bg-gray-200 transition-colors text-sm whitespace-nowrap`}
-                        style={{ marginLeft: `${level * 20}px` }}
+                        style={{marginLeft: `${level * 20}px`}}
                     >
-                        {item}
+                        {item.title}
                     </button>
                 );
             } else {
@@ -79,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                         <button
                             onClick={() => toggleGroup(item.id)}
                             className={`w-full flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-gray-200 transition-colors`}
-                            style={{ marginLeft: `${level * 20}px` }}
+                            style={{marginLeft: `${level * 20}px`}}
                         >
                             <span className="font-medium whitespace-nowrap text-sm">
                                 {item.title}
@@ -89,7 +93,9 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                             }`}/>
                         </button>
                         {isExpanded && item.items && (
-                            <div className="space-y-1 animate-in slide-in-from-top-2 duration-200">
+                            <div onClick={() => {
+                                navigate(item.id)
+                            }} className="space-y-1 animate-in slide-in-from-top-2 duration-200">
                                 {renderItems(item.items, level + 1)}
                             </div>
                         )}
@@ -119,7 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b border-gray-800">
                         <div className="w-full flex items-center justify-between">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">Tern Yuka</h1>
+                            <h1 onClick={()=>{navigate('/')}} className="hover:cursor-pointer text-lg font-semibold whitespace-nowrap">Tern Yuka</h1>
                             <button
                                 onClick={onToggle}
                                 className={`p-3 rounded-lg hover:bg-gray-200 `}
