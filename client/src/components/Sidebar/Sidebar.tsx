@@ -9,10 +9,12 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+    const [selectedItem, setSelectedItem] = useState<string>('');
     const navigate = useNavigate();
 
     const toggleGroup = (groupId: string) => {
         navigate(groupId);
+        setSelectedItem(groupId);
         setExpandedGroups(prev => ({
             ...prev,
             [groupId]: !prev[groupId]
@@ -68,8 +70,11 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                 return (
                     <button
                         key={index}
-                        onClick={() => {navigate(item.id)}}
-                        className={`w-full text-left p-2 rounded-md text-gray-800 hover:bg-gray-200 transition-colors text-sm whitespace-nowrap`}
+                        onClick={() => {
+                            navigate(item.id);
+                            setSelectedItem(item.id);
+                        }}
+                        className={`w-full text-left p-2 rounded-md text-gray-800 hover:bg-gray-200 transition-colors text-sm whitespace-nowrap ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
                         style={{marginLeft: `${level * 20}px`}}
                     >
                         {item.title}
@@ -82,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                     <div key={item.id} className="space-y-1">
                         <button
                             onClick={() => toggleGroup(item.id)}
-                            className={`w-full flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-gray-200 transition-colors`}
+                            className={`w-full flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-gray-200 transition-colors ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
                             style={{marginLeft: `${level * 20}px`}}
                         >
                             <span className="font-medium whitespace-nowrap text-sm">
@@ -146,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                                     {/* Group Header */}
                                     <button
                                         onClick={() => toggleGroup(area.id)}
-                                        className="w-full flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors"
+                                        className={`w-full flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors ${selectedItem === area.id ? 'bg-gray-200' : ''}`}
                                     >
                                         <div className="flex items-center gap-3">
                                             <Icon className="w-5 h-5 flex-shrink-0"/>

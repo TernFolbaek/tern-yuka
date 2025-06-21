@@ -6,5 +6,26 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.tw-header': {
+          fontSize: '2rem',
+          fontWeight: '700',
+          lineHeight: '1.2',
+        },
+        '.tw-sub-header': {
+          fontSize: '1.5rem',
+          fontWeight: '600',
+          lineHeight: '1.3',
+        },
+        '.tw-subtitle': {
+          fontSize: '1rem',
+          fontWeight: '500',
+          lineHeight: '1.4',
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 }

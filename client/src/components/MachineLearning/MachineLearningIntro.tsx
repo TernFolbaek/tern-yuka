@@ -1,11 +1,11 @@
 import memeImage from '../../assets/machine_learning_intro_meme.jpg'
 
-const MachineLearningIntro: React.FC = () => {
+const MachineLearningIntro = () => {
     return (
         <div className="flex gap-20">
             <div className="flex-1">
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">Machine Learning</h1>
-                <p className="text-gray-600 text-lg text-justify">
+                <h1 className="tw-header font-bold text-gray-900 mb-4">Machine Learning</h1>
+                <p className="text-gray-600 tw-subtitle text-justify">
                     Machine Learning can be split up into 3 main well-known
                     categories. <strong>Supervised</strong> - <strong>Unsupervised</strong> - and
                     <strong> Reinforced</strong> Learning.
