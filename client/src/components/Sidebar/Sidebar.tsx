@@ -11,7 +11,6 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
     const [selectedItem, setSelectedItem] = useState<string>('');
     const navigate = useNavigate();
-
     const toggleGroup = (groupId: string) => {
         navigate(groupId);
         setSelectedItem(groupId);
