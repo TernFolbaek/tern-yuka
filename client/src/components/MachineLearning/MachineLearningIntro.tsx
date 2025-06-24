@@ -12,15 +12,20 @@ const MachineLearningIntro = () => {
                     Each of these main categories have their own respective sub categories. And these will be runningly
                     added with some interactivity to underline the main
                     characteristics of each algorithm or technique.
-                    <hr className="mt-2 mb-2"/>
+
+                </p>
+                <hr className="mt-2 mb-2"/>
+                <p className="tw-subtitle text-gray-600">
                     There are of course other parent categories, such as Semi-supervised Learning, Self-supervised
                     Learning,
-                    Transfer Learning, <strong>Few Shot Learning</strong> <strong>Meta Learning</strong>, <strong>Online Learning</strong>. However I believe these
+                    Transfer Learning, <strong>Few Shot Learning</strong> <strong>Meta Learning</strong>, <strong>Online
+                    Learning</strong>. However I believe these
                     categories
                     fall into the two umbrellas, being supervised and unsupervised techniques. But they will also be
                     given
                     their respective folders.
                 </p>
+
             </div>
             <img className="flex-1 rounded-md" src={memeImage} alt="Meme Learning"/>
         </div>
