@@ -13,6 +13,7 @@ module.exports = {
           fontSize: '2rem',
           fontWeight: '700',
           lineHeight: '1.2',
+          paddingBottom: '1rem',
         },
         '.tw-sub-header': {
           fontSize: '1.5rem',
