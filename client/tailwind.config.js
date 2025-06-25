@@ -22,7 +22,7 @@ module.exports = {
         },
         '.tw-subtitle': {
           fontSize: '1rem',
-          fontWeight: '500',
+          fontWeight: '400',
           lineHeight: '1.4',
         },
       }

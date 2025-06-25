@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="59e4bfbe-7040-4311-a20e-663781795aee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MachineLearning/GradientDescent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MachineLearning/GradientDescent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MachineLearning/SupervisedLearning/LinearRegression.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MachineLearning/SupervisedLearning/LinearRegression.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +59,8 @@
       <option name="presentableId" value="Default" />
       <updated>1750618217840</updated>
       <workItem from="1750618219110" duration="9736000" />
-      <workItem from="1750791831782" duration="1411000" />
+      <workItem from="1750791831782" duration="1691000" />
+      <workItem from="1750874288361" duration="1855000" />
     </task>
     <servers />
   </component>
