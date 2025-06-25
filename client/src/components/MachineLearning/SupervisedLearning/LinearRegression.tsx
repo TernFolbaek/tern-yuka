@@ -1,11 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
+import {PyodideInstance} from "../../../types/pyiodideTypes";
 
-interface PyodideInstance {
-    runPython: (code: string) => any;
-    globals: any;
-    loadPackage: (packages: string | string[]) => Promise<void>;
-}
 
 const LinearRegression = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
@@ -139,7 +135,7 @@ const LinearRegression = () => {
                         <p className="text-lg font-semibold">Interactive Python Environment</p>
                         <button
                             onClick={resetPythonEnvironment}
-                            className="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600"
+                            className="px-3 py-1 bg-purple-100 text-purple-500 text-sm rounded-md hover:bg-purple-200"
                         >
                             Reset Environment
                         </button>
@@ -258,46 +254,47 @@ const LinearRegression = () => {
                             </div>
                         )}
                     </div>
+                    <div className="bg-white border border-gray-200 rounded-lg p-2 mt-4 shadow-sm">
+                        <h3 className="pl-4 pt-4 text-lg font-semibold text-gray-900 mb-4">Related Topics</h3>
+                        <div className="space-y-2">
+                            <button
+                                onClick={() => {navigate('/machine-learning/gradient-descent')}}
+                                className="w-full text-left px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 flex items-center justify-between group"
+                            >
+                                <span className="font-medium">Gradient Descent</span>
+                                <svg
+                                    className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+
+                            <button
+                                onClick={() => {/* Add your scaling navigation here */}}
+                                className="w-full text-left px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 flex items-center justify-between group"
+                            >
+                                <span className="font-medium">Feature Scaling</span>
+                                <svg
+                                    className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
             )}
-
-            <div className="bg-white border border-gray-200 rounded-lg p-2 mt-4 shadow-sm">
-                <h3 className="pl-4 pt-4 text-lg font-semibold text-gray-900 mb-4">Related Topics</h3>
-                <div className="space-y-2">
-                    <button
-                        onClick={() => {navigate('/machine-learning/gradient-descent')}}
-                        className="w-full text-left px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 flex items-center justify-between group"
-                    >
-                        <span className="font-medium">Gradient Descent</span>
-                        <svg
-                            className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-
-                    <button
-                        onClick={() => {/* Add your scaling navigation here */}}
-                        className="w-full text-left px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200 flex items-center justify-between group"
-                    >
-                        <span className="font-medium">Feature Scaling</span>
-                        <svg
-                            className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
 
         </div>
     )
 }
 
 export default LinearRegression;
+
