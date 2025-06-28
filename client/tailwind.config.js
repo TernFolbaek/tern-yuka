@@ -21,9 +21,9 @@ module.exports = {
           lineHeight: '1.3',
         },
         '.tw-subtitle': {
-          fontSize: '1rem',
-          fontWeight: '400',
-          lineHeight: '1.4',
+          fontSize: '1.1rem',
+          fontWeight: '300',
+          lineHeight: '1.6',
         },
       }
       addUtilities(newUtilities)

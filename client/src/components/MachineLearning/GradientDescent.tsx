@@ -1,6 +1,8 @@
 import {PyodideInstance} from "../../types/pyiodideTypes";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {BlockMath, InlineMath} from 'react-katex';
+import CostFunctionSlope from '../../assets/cost-function-slope.webp'
 
 const GradientDescent = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
@@ -88,8 +90,70 @@ const GradientDescent = () => {
             <hr className={"mt-2 mb-2"}/>
             <p className="tw-subtitle">
                 I will be extending my example from the Linear Regression page, being house prices. However
-                lets add a few more training rows and features.
+                lets add a few more training rows and features. Before we move onto the coding example, I will talk you
+                through some key functions that are necessary for gradient descent. As we will be implementing it from
+                scratch, and not using any external libraries.
             </p>
+            <br/>
+            <ul className="list-disc list-inside space-y-1">
+                <li className="tw-subtitle">Compute Error</li>
+                <li className="tw-subtitle">Compute Gradient</li>
+                <li className="tw-subtitle">Run Gradient Descent</li>
+            </ul>
+            <br/>
+            <hr className={"mt-2 mb-2"}/>
+            <p className="tw-sub-header">Compute Error</p>
+            <p className="tw-subtitle">
+                The cost function is the function that we want to minimize. The cost function indicates the accuracy of
+                our model.
+                It looks as follows:
+                <BlockMath math="J(w,b) = \frac{1}{2m} \sum_{i=1}^{m} (f_w,_b(x^{(i)}) - y^{(i)})^2"/>
+                This is the mean squared error. The mean squared error is called that because it calculates the mean
+                (average) of the squared differences between predicted and actual values.
+                <br/>
+                Below being our model prediction:
+                <BlockMath math="f_w,_b(x^{(i)})"/>
+                <br/>
+                And below being the true value y:
+                <BlockMath math="y^{(i)}"/>
+                They are superscripted by the index i, because we have multiple training rows. As you can see in our
+                cost function, we are iterating through <strong className="font-extrabold">m</strong>. And <strong
+                className="font-extrabold">m</strong> is the number of
+                training rows we have.
+            </p>
+            <br/>
+            <p className="tw-sub-header">Compute Gradient</p>
+            <p className="tw-subtitle">
+                Once we have our cost function, we can use it to compute the gradient. Below is an image to illustrate
+                what we are doing with gradient descent.
+            </p>
+            <img className="ml-auto mr-auto" src={CostFunctionSlope} alt="Cost function slope"/>
+            <p className="tw-subtitle">
+                This image is limited as it can only show us how 2 weights or 1 weight and 1 bias, affects the cost
+                function value. In this case being x and y, being our weights, and the vertical axis being the value of
+                our cost function.
+                As you can see, our weights (x, y) would both be around the value 0 to obtain the most accurate model
+                for our training data. This however doesn't necessarily mean they are the best weights, and this is a
+                topic of discussion elsewhere in our overfitting section.
+            </p>
+            <br/>
+            <p className="tw-subtitle">
+                To compute our gradient, we will simply take the partial derivative of our cost function, with respect
+                to <strong className="font-extrabold">w</strong> and with respect to <strong
+                className="font-extrabold">b</strong>. This looks as follows:
+            </p>
+            <BlockMath math="\frac{\delta J(w,b)^{(i)}}{\delta b} = (f_w,_b(x^{(i)}) - y^{(i)})"/>
+            <BlockMath math="\frac{\delta J(w,b)^{(i)}}{\delta w} = (f_w,_b(x^{(i)}) - y^{(i)})x_j ^{(i)}"/>
+            <br/>
+            <p className="tw-sub-header">Run Gradient Descent</p>
+            <p className="tw-subtitle">
+                Now that we have our <strong className="font-extrabold">Compute Gradient</strong> function in place,
+                that makes use of our cost function. We can now make use of gradient descent. What gradient descent
+                does, it changes our weights and bias values, so that our spot in the <strong
+                className="font-extrabold">Cost Function</strong> slope reduces. Meaning we are attempting to step our
+                way down, to reach the global minimum.
+            </p>
+
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-12">
                     <div className="relative">
@@ -121,7 +185,9 @@ const GradientDescent = () => {
                     <div className="space-y-3">
                         <h3 className="tw-sub-header">Step 1: Declare features and targets</h3>
                         <ul className="list-disc list-inside space-y-1">
-                            <li className="text-sm text-gray-600">Variable x contains our training rows and their respective features</li>
+                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
+                                respective features
+                            </li>
                             <li className="text-sm text-gray-600">Variable y contains our target values</li>
                         </ul>
                         <textarea
@@ -146,12 +212,15 @@ const GradientDescent = () => {
                             </div>
                         )}
                     </div>
+                    <p className="tw-subtitle"></p>
 
                     {/* Second Code Block */}
                     <div className="space-y-3">
                         <h3 className="tw-sub-header">Step 1: Declare features and targets</h3>
                         <ul className="list-disc list-inside space-y-1">
-                            <li className="text-sm text-gray-600">Variable x contains our training rows and their respective features</li>
+                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
+                                respective features
+                            </li>
                             <li className="text-sm text-gray-600">Variable y contains our target values</li>
                         </ul>
                         <textarea

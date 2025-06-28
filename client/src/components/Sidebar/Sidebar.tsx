@@ -25,7 +25,12 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
             id: 'maths',
             title: 'Maths',
             icon: Calculator,
-            items: []
+            items: [
+                {
+                    id: 'maths/linear-algebra',
+                    title: 'Linear Algebra',
+                },
+            ]
         },
         {
             id: 'physics',

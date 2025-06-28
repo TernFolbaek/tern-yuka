@@ -5,11 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="59e4bfbe-7040-4311-a20e-663781795aee" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/assets/cost-function-slope.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Maths/LinearAlgebra/LinearAlgebraIntro.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Maths/LinearAlgebra/LinearAlgebraRoutes.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Maths/LinearAlgebra/Vectors/Vectorization.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MachineLearning/GradientDescent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MachineLearning/GradientDescent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MachineLearning/SupervisedLearning/LinearRegression.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MachineLearning/SupervisedLearning/LinearRegression.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
@@ -44,6 +50,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/assets" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -60,11 +71,53 @@
       <updated>1750618217840</updated>
       <workItem from="1750618219110" duration="9736000" />
       <workItem from="1750791831782" duration="1691000" />
-      <workItem from="1750874288361" duration="1855000" />
+      <workItem from="1750874288361" duration="2517000" />
+      <workItem from="1750933934350" duration="2336000" />
+      <workItem from="1751050433492" duration="2420000" />
+      <workItem from="1751134274615" duration="3639000" />
     </task>
+    <task id="LOCAL-00001" summary="Gradient descent section">
+      <option name="closed" value="true" />
+      <created>1750883117390</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750883117390</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Gradient descent section">
+      <option name="closed" value="true" />
+      <created>1750883120273</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1750883120273</updated>
+    </task>
+    <task id="LOCAL-00003" summary="random">
+      <option name="closed" value="true" />
+      <created>1750883129777</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1750883129777</updated>
+    </task>
+    <task id="LOCAL-00004" summary="pyidodide service and type">
+      <option name="closed" value="true" />
+      <created>1750883140622</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1750883140622</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Gradient descent section" />
+    <MESSAGE value="random" />
+    <MESSAGE value="pyidodide service and type" />
+    <option name="LAST_COMMIT_MESSAGE" value="pyidodide service and type" />
   </component>
 </project>

@@ -87,7 +87,7 @@ const LinearRegression = () => {
     return (
         <div>
             <h1 className="text-3xl font-bold mb-4">Linear Regression</h1>
-            <p className="text-gray-600 mb-4">
+            <p className="mb-4 tw-subtitle">
                 Linear Regression is a type of Supervised Learning. You might remember it from your school maths. Very
                 basic stuff. However Linear regression can be quite powerful in certain scenarios. Especially when you
                 want a very performant model, and a model which is easy to backtrace and deconstruct the reasoning
@@ -109,14 +109,14 @@ const LinearRegression = () => {
             </div>
 
             <hr className="mt-4 mb-4"/>
-            <p className="text-gray-600 mb-4">
+            <p className="tw-subtitle mb-4">
                 Linear regression can be with a singular feature, or multiple features. If we were to give a simple
                 example. Let's say we want to predict the pricing of a house. A very simple and obvious feature we could
                 pick out, would be the square meterage of the house to predict the price. Typically meaning, the bigger
                 the square meterage, the more expensive the house will be.
             </p>
             <br/>
-            <p className="text-gray-600 mb-6">
+            <p className="tw-subtitle mb-6">
                 But of course the square meterage is not the only feature we could use. We could also use the number of
                 bedrooms, bathrooms, stories, etc.
                 Making our inference (prediction) of the model, more accurate.
