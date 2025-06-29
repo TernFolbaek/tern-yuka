@@ -65,6 +65,11 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                     items: []
                 },
                 {
+                    id: 'machine-learning/reinforced-learning',
+                    title: 'Reinforced Learning',
+                    items: []
+                },
+                {
                     id: 'machine-learning/gradient-descent',
                     title: 'Gradient descent',
                 },
