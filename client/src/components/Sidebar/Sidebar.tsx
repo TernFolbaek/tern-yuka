@@ -29,6 +29,13 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                 {
                     id: 'maths/linear-algebra',
                     title: 'Linear Algebra',
+                    items: [
+                        {
+                            id: 'maths/linear-algebra/vectors',
+                            title: 'Vectors',
+                            items: []
+                        }
+                    ]
                 },
             ]
         },
