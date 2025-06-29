@@ -1,8 +1,6 @@
 const SupervisedLearningIntro = () => {
     return(
-        <div>
-            nice
-        </div>
+        <p className="tw-header">Supervised Learning</p>
     )
 }
 

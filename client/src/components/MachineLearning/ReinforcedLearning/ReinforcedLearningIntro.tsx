@@ -1,8 +1,6 @@
 const ReinforcedLearningIntro = () => {
-    return(
-        <div>
-            nice
-        </div>
+    return (
+        <p className="tw-header">Reinforced Learning</p>
     )
 }
 
