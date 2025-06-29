@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="59e4bfbe-7040-4311-a20e-663781795aee" name="Changes" comment="" />
+    <list default="true" id="59e4bfbe-7040-4311-a20e-663781795aee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MachineLearning/GradientDescent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MachineLearning/GradientDescent.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,7 +63,7 @@
       <workItem from="1750874288361" duration="2517000" />
       <workItem from="1750933934350" duration="2336000" />
       <workItem from="1751050433492" duration="2420000" />
-      <workItem from="1751134274615" duration="4082000" />
+      <workItem from="1751134274615" duration="5961000" />
     </task>
     <task id="LOCAL-00001" summary="Gradient descent section">
       <option name="closed" value="true" />

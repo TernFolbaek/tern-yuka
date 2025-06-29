@@ -7,8 +7,18 @@ import CostFunctionSlope from '../../assets/cost-function-slope.webp'
 const GradientDescent = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
     const [code1, setCode1] = useState('x = np.array([[100,2,3],[120,3,5],[130,3,6]])\ny = np.array([200,320,400])\nprint("x = ", x)\nprint("y = ", y)');
+    const [code2, setCode2] = useState('def compute_cost(x,y,w,b):\n    m = x.shape[0]\n    cost = 0\n    # we will loop through all trainining examples, which is the value of m\n    for i in range(m):\n        f_wb = w * x[i] + b\n        cost = cost + (f_wb - y[i])**2\n    total_cost = 1 / (2 * m) * cost\n    return total_cost');
+    const [code3, setCode3] = useState('def compute_gradient(x,y,w,b):\n    m = x.shape[0]\n    n = x.shape[1]\n    dj_dw = np.zeros(n)\n    dj_db = 0\n    for i in range(m):\n        f_wb = w * x[i] + b\n        dj_dw_i = (f_wb - y[i]) * x[i]\n        dj_db_i = f_wb - y[i]\n        dj_db += dj_db_i\n        dj_dw += dj_dw_i\n    dj_dw = dj_dw /m\n    dj_db = dj_db / m\n    return dj_dw, dj_db');
+    const [code4, setCode4] = useState('');
+
     const [output1, setOutput1] = useState('');
     const [isRunning1, setIsRunning1] = useState(false);
+    const [output2, setOutput2] = useState('');
+    const [isRunning2, setIsRunning2] = useState(false);
+    const [output3, setOutput3] = useState('');
+    const [isRunning3, setIsRunning3] = useState(false);
+    const [output4, setOutput4] = useState('');
+    const [isRunning4, setIsRunning4] = useState(false);
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
@@ -216,7 +226,7 @@ const GradientDescent = () => {
 
                     {/* Second Code Block */}
                     <div className="space-y-3">
-                        <h3 className="tw-sub-header">Step 1: Declare features and targets</h3>
+                        <h3 className="tw-sub-header">Step 2: Compute the cost function </h3>
                         <ul className="list-disc list-inside space-y-1">
                             <li className="text-sm text-gray-600">Variable x contains our training rows and their
                                 respective features
@@ -224,23 +234,55 @@ const GradientDescent = () => {
                             <li className="text-sm text-gray-600">Variable y contains our target values</li>
                         </ul>
                         <textarea
-                            value={code1}
-                            onChange={(e) => setCode1(e.target.value)}
+                            value={code2}
+                            onChange={(e) => setCode2(e.target.value)}
                             className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code1, setOutput1, setIsRunning1)}
-                            disabled={isRunning1}
+                            onClick={() => runCode(code2, setOutput2, setIsRunning2)}
+                            disabled={isRunning2}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
-                            {isRunning1 ? 'Running...' : 'Run'}
+                            {isRunning2 ? 'Running...' : 'Run'}
                         </button>
-                        {output1 && (
+                        {output2 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 1:</h4>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
-                                    {output1}
+                                    {output2}
+                                </pre>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Third Code Block */}
+                    <div className="space-y-3">
+                        <h3 className="tw-sub-header">Step 3: Compute the gradient </h3>
+                        <ul className="list-disc list-inside space-y-1">
+                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
+                                respective features
+                            </li>
+                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                        </ul>
+                        <textarea
+                            value={code3}
+                            onChange={(e) => setCode3(e.target.value)}
+                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your Python code here..."
+                        />
+                        <button
+                            onClick={() => runCode(code3, setOutput3, setIsRunning3)}
+                            disabled={isRunning3}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                            {isRunning3 ? 'Running...' : 'Run'}
+                        </button>
+                        {output3 && (
+                            <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
+                                <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
+                                    {output3}
                                 </pre>
                             </div>
                         )}
