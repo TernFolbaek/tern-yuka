@@ -1,15 +1,98 @@
 import {PyodideInstance} from "../../types/pyiodideTypes";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {BlockMath, InlineMath} from 'react-katex';
+import {BlockMath} from 'react-katex';
 import CostFunctionSlope from '../../assets/cost-function-slope.webp'
 
 const GradientDescent = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
-    const [code1, setCode1] = useState('x = np.array([[100,2,3],[120,3,5],[130,3,6]])\ny = np.array([200,320,400])\nprint("x = ", x)\nprint("y = ", y)');
-    const [code2, setCode2] = useState('def compute_cost(x,y,w,b):\n    m = x.shape[0]\n    cost = 0\n    # we will loop through all trainining examples, which is the value of m\n    for i in range(m):\n        f_wb = w * x[i] + b\n        cost = cost + (f_wb - y[i])**2\n    total_cost = 1 / (2 * m) * cost\n    return total_cost');
-    const [code3, setCode3] = useState('def compute_gradient(x,y,w,b):\n    m = x.shape[0]\n    n = x.shape[1]\n    dj_dw = np.zeros(n)\n    dj_db = 0\n    for i in range(m):\n        f_wb = w * x[i] + b\n        dj_dw_i = (f_wb - y[i]) * x[i]\n        dj_db_i = f_wb - y[i]\n        dj_db += dj_db_i\n        dj_dw += dj_dw_i\n    dj_dw = dj_dw /m\n    dj_db = dj_db / m\n    return dj_dw, dj_db');
-    const [code4, setCode4] = useState('');
+    const [code1, setCode1] = useState('x_train = np.array([[100,2,3],[120,3,5],[130,3,6]])\ny_train = np.array([200,320,400])\nprint("x_train = ", x_train)\nprint("y_train = ", y_train)');
+    const [code2, setCode2] = useState(`
+def compute_cost(x,y,w,b):
+    m = x.shape[0]
+    cost = 0
+    # we will loop through all training examples, which is the value of m
+    for i in range(m):
+        f_wb = np.dot(w, x[i]) + b  # Use dot product instead of w * x[i]
+        cost = cost + (f_wb - y[i])**2
+    total_cost = 1 / (2 * m) * cost
+    return total_cost
+`);
+    const [code3, setCode3] = useState(`
+def compute_gradient(x,y,w,b):
+    m = x.shape[0]
+    n = x.shape[1]
+    dj_dw = np.zeros(n)
+    dj_db = 0
+    for i in range(m):
+        f_wb = np.dot(w, x[i]) + b  # Use dot product here too
+        dj_dw_i = (f_wb - y[i]) * x[i]
+        dj_db_i = f_wb - y[i]
+        dj_db += dj_db_i
+        dj_dw += dj_dw_i
+    dj_dw = dj_dw / m
+    dj_db = dj_db / m
+    return dj_dw, dj_db
+`);
+    const [code4, setCode4] = useState(`
+def gradient_descent(x,y,w_in,b_in,alpha,n_iters):
+    # An array to store cost J and w's at each iteration for graphing
+    J_history = []
+    p_history = []
+    b = b_in
+    w = w_in
+    
+    for i in range(n_iters):
+        # Calculate the gradient and update our weights
+        
+        dj_dw, dj_db = compute_gradient(x,y,w,b)
+        w = w - alpha * dj_dw
+        b = b - alpha * dj_db
+        
+        # Save cost at every 100 iterations
+        if i < 10000:
+            J_history.append(compute_cost(x,y,w,b))
+            p_history.append([w,b])
+            
+        # Print cost at every 10 intervals 
+        if i % math.ceil(n_iters / 10) == 0:
+            # Convert everything to safe Python types
+            cost_val = float(J_history[-1])
+            dj_db_val = float(dj_db) if hasattr(dj_db, 'item') else float(dj_db)
+            b_val = float(b) if hasattr(b, 'item') else float(b)
+            
+            # Format the arrays
+            w_list = [float(x) for x in w.flatten()]
+            dj_dw_list = [float(x) for x in dj_dw.flatten()]
+            
+            w_formatted = [f"{val:0.3e}" for val in w_list]
+            dj_dw_formatted = [f"{val:0.3e}" for val in dj_dw_list]
+            
+            print(f"Iteration {i:4}: Cost {cost_val:0.2e}")
+            print(f"  dj_dw: {dj_dw_formatted}, dj_db: {dj_db_val:0.3e}")
+            print(f"  w: {w_formatted}, b: {b_val:0.5e}")
+    return w, b, J_history, p_history
+`);
+    const [code5, setCode5] = useState(`
+w_init = np.zeros(x_train.shape[1])
+b_init = 0
+# some gradient descent settings
+iterations = 10000
+alpha = 1.0e-4
+# run gradient descent
+w_final, b_final, J_history, p_history = gradient_descent(x_train,y_train,w_init,b_init,alpha,iterations)
+    `)
+
+    const [code6, setCode6] = useState(`
+# plot cost versus iteration  
+fig, (ax1, ax2) = plt.subplots(1, 2, constrained_layout=True, figsize=(12,4))
+ax1.plot(J_history[:100])
+ax2.plot(1000 + np.arange(len(J_history[1000:])), J_history[1000:])
+ax1.set_title("Cost vs. iteration(start)");  ax2.set_title("Cost vs. iteration (end)")
+ax1.set_ylabel('Cost')            ;  ax2.set_ylabel('Cost') 
+ax1.set_xlabel('iteration step')  ;  ax2.set_xlabel('iteration step') 
+plt.show()
+    `)
 
     const [output1, setOutput1] = useState('');
     const [isRunning1, setIsRunning1] = useState(false);
@@ -19,6 +102,10 @@ const GradientDescent = () => {
     const [isRunning3, setIsRunning3] = useState(false);
     const [output4, setOutput4] = useState('');
     const [isRunning4, setIsRunning4] = useState(false);
+    const [output5, setOutput5] = useState('');
+    const [isRunning5, setIsRunning5] = useState(false);
+    const [output6, setOutput6] = useState('');
+    const [isRunning6, setIsRunning6] = useState(false);
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
@@ -39,7 +126,8 @@ const GradientDescent = () => {
                     from io import StringIO
                     from sklearn.linear_model import SGDRegressor
                     from sklearn.preprocessing import StandardScaler 
-                    
+                    import matplotlib.pyplot as plt
+                    import math
                 `);
 
                 setPyodide(pyodideModule);
@@ -283,6 +371,102 @@ const GradientDescent = () => {
                                 <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output3}
+                                </pre>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Fourth Code Block */}
+                    <div className="space-y-3">
+                        <h3 className="tw-sub-header">Step 4: Compute the gradient </h3>
+                        <ul className="list-disc list-inside space-y-1">
+                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
+                                respective features
+                            </li>
+                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                        </ul>
+                        <textarea
+                            value={code4}
+                            onChange={(e) => setCode4(e.target.value)}
+                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your Python code here..."
+                        />
+                        <button
+                            onClick={() => runCode(code4, setOutput4, setIsRunning4)}
+                            disabled={isRunning4}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                            {isRunning3 ? 'Running...' : 'Run'}
+                        </button>
+                        {output4 && (
+                            <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
+                                <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
+                                    {output4}
+                                </pre>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Fifth Code Block */}
+                    <div className="space-y-3">
+                        <h3 className="tw-sub-header">Step 5: Compute the gradient </h3>
+                        <ul className="list-disc list-inside space-y-1">
+                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
+                                respective features
+                            </li>
+                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                        </ul>
+                        <textarea
+                            value={code5}
+                            onChange={(e) => setCode5(e.target.value)}
+                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your Python code here..."
+                        />
+                        <button
+                            onClick={() => runCode(code5, setOutput5, setIsRunning5)}
+                            disabled={isRunning5}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                            {isRunning5 ? 'Running...' : 'Run'}
+                        </button>
+                        {output5 && (
+                            <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
+                                <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
+                                    {output5}
+                                </pre>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Sixth Code Block */}
+                    <div className="space-y-3">
+                        <h3 className="tw-sub-header">Step 6: Compute the gradient </h3>
+                        <ul className="list-disc list-inside space-y-1">
+                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
+                                respective features
+                            </li>
+                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                        </ul>
+                        <textarea
+                            value={code6}
+                            onChange={(e) => setCode6(e.target.value)}
+                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your Python code here..."
+                        />
+                        <button
+                            onClick={() => runCode(code6, setOutput6, setIsRunning6)}
+                            disabled={isRunning6}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                            {isRunning6 ? 'Running...' : 'Run'}
+                        </button>
+                        {output6 && (
+                            <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
+                                <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
+                                    {output6}
                                 </pre>
                             </div>
                         )}
