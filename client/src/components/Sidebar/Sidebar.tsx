@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
         const learningAreas = [
                 {
                     id: 'maths',
-                    title: 'Maths',
+                    title: 'Math',
                     icon: Calculator,
                     items: [
                         {

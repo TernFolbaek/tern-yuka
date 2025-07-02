@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import Home from './components/Home';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import MachineLearningRoutes from "./components/MachineLearning/MachineLearningRoutes";
+import MathRoutes from "./components/Maths/MathRoutes";
 
 const App: React.FC = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -23,6 +24,8 @@ const App: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<Home/>}/>
                         <Route path="/machine-learning/*" element={<MachineLearningRoutes/>}/>
+                        <Route path="/maths/*" element={<MathRoutes/>}/>
+
                     </Routes>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-const Physics = () => {
+const PhysicsIntro = () => {
     return (
         <div>
             Physics
@@ -6,4 +6,4 @@ const Physics = () => {
     )
 }
 
-export default Physics;
+export default PhysicsIntro;

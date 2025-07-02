@@ -1,4 +1,4 @@
-const Maths = () => {
+const MathIntroduction = () => {
     return (
         <div>
             Maths
@@ -6,4 +6,4 @@ const Maths = () => {
     )
 }
 
-export default Maths;
+export default MathIntroduction;
