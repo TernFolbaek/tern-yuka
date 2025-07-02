@@ -6,7 +6,7 @@ import JaccardUnion from '../../../../assets/jaccard_union.png'
 const JaccardSimiliarity = () => {
     return (
         <div>
-            <p className="tw-header top-1 sticky bg-white bg-opacity-80">Jaccard Similiarity</p>
+            <p className="tw-header top-0 sticky bg-white bg-opacity-80">Jaccard Similiarity</p>
             <p className="tw-subtitle">Let's throw a hypothetical problem you're having at work so we understand this
                 concept as simply as possible. Let's say you're given a new task. This task is for you to compose the
                 most efficient team given the project at hand. You are a project manager working in a 200+ employee
@@ -72,10 +72,20 @@ const JaccardSimiliarity = () => {
             <br/>
             <div className="flex justify-center"><InlineMath math="B \cup C = 7"/></div>
 
-            Now that we have the intersections and unions of each pair, we can at last calculate the Jaccard similarity for the three pairs and compare.
-            <BlockMath math="J(A,B) = \frac{|A \cap B|}{|A \cup B|} = \frac{|A \cap B|}{|A| + |B| - |A \cap B|} = \frac{|Bob|}{|Bob, Mike, Sarah, Lisa, Teddy, Monica|} = \frac{|Bob|}{|Bob, Mike, Sarah, Lisa| + |Bob, Teddy, Monica| - |Bob|} = \frac{1}{7-1} = 0.166667"/>
-            <BlockMath math="J(A,C) = \frac{|A \cap C|}{|A \cup C|} = \frac{|A \cap C|}{|A| + |C| - |A \cap C|} = \frac{|A \cap C|}{|A \cup C|} = \frac{|A \cap C|}{|A| + |C| - |A \cap C|}"/>
-            <BlockMath math="J(B,C) = \frac{|B \cap C|}{|B \cup C|} = \frac{|B \cap C|}{|B| + |C| - |B \cap C|} = \frac{|B \cap C|}{|B \cup C|} = \frac{|B \cap C|}{|B| + |C| - |B \cap C|}"/>
+            Now that we have the intersections and unions of each pair, we can at last calculate the Jaccard similarity
+            for the three pairs and compare.
+            <BlockMath
+                math="J(A,B) = \frac{|A \cap B|}{|A \cup B|} = \frac{|A \cap B|}{|A| + |B| - |A \cap B|} = \frac{|Bob|}{|Bob, Mike, Sarah, Lisa, Teddy, Monica|} = \frac{|Bob|}{|Bob, Mike, Sarah, Lisa| + |Bob, Teddy, Monica| - |Bob|} = \frac{1}{7-1} = 0.166667"/>
+            <br/>
+            <BlockMath
+                math="J(A,C) = \frac{|A \cap C|}{|A \cup C|} = \frac{|A \cap C|}{|A| + |C| - |A \cap C|} = \frac{|Bob, Sarah, Lisa|}{|Bob, Mike, Sarah, lisa, Monica, teddy, Frederik|} = \frac{|Bob, Sarah, Lisa|}{|Bob, Mike, Sarah, Lisa| + |Bob, Teddy, Monica, Sarah, Mike, Lisa, Frederik| - |Bob, Sarah, Lisa|} = \frac{3}{11-3} = 0.375"/>
+            <br/>
+            <BlockMath
+                math="J(B,C) = \frac{|B \cap C|}{|B \cup C|} = \frac{|B \cap C|}{|B| + |C| - |B \cap C|} = \frac{|Bob, Teddy, Monica|}{|Bob, Teddy, Monica, Sarah, Mike, Lisa, Frederik|} = \frac{|Bob, Teddy, Monica|}{|Bob, Teddy, Monica| + |Bob, Teddy, Monica, Sarah, Mike, Lisa, Frederik| - |Bob, Teddy, Monica|} = \frac{3}{10-3} = 0.4289"/>
+
+            <strong className="mt-10 font-medium flex justify-center">As we can see, the best pair would be Employee B and C as they have a
+                Jaccard similarity of 0.4289.</strong>
+
 
         </div>
     )
