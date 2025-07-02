@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {BlockMath, InlineMath} from 'react-katex';
 import CostFunctionSlope from '../../assets/cost-function-slope.webp'
+import {loadPyodide, runCode} from "../../services/pyiodideService";
 
 const GradientDescent = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
@@ -108,38 +109,10 @@ plt.show()
     const [isRunning6, setIsRunning6] = useState(false);
     const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(true);
-
-    const loadPyodide = async () => {
-        try {
-            const pyodideModule = await (window as any).loadPyodide({
-                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
-            });
-
-            // Load required packages
-            await pyodideModule.loadPackage(['numpy', 'matplotlib', 'scikit-learn']);
-
-            // Set up stdout capture and imports
-            pyodideModule.runPython(`
-                    import sys
-                    import numpy as np
-                    from io import StringIO
-                    from sklearn.linear_model import SGDRegressor
-                    from sklearn.preprocessing import StandardScaler 
-                    import matplotlib.pyplot as plt
-                    import math
-                `);
-
-            setPyodide(pyodideModule);
-            setLoading(false);
-        } catch (error) {
-            console.error('Failed to load Pyodide:', error);
-            setLoading(false);
-        }
-    };
+    const [loading, setLoading] = useState<boolean | null>(true);
 
     useEffect(() => {
-        loadPyodide();
+        loadPyodide(setLoading, setPyodide)
     }, []);
 
     const resetPythonEnvironment = () => {
@@ -156,29 +129,7 @@ plt.show()
         setOutput4('');
         setOutput5('');
         setOutput6('');
-        loadPyodide()
-    };
-
-    const runCode = async (code: string, setOutput: (output: string) => void, setIsRunning: (running: boolean) => void) => {
-        if (!pyodide) return;
-
-        setIsRunning(true);
-        try {
-            // Create new StringIO for this execution
-            pyodide.runPython(`
-                sys.stdout = StringIO()
-            `);
-
-            // Run user code (variables persist in global scope)
-            pyodide.runPython(code);
-
-            // Get output
-            const stdout = pyodide.runPython("sys.stdout.getvalue()");
-            setOutput(stdout || 'Code executed successfully (no output)');
-        } catch (error) {
-            setOutput(`Error: ${error}`);
-        }
-        setIsRunning(false);
+        loadPyodide(setLoading, setPyodide)
     };
 
     return (
@@ -302,7 +253,7 @@ plt.show()
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code1, setOutput1, setIsRunning1)}
+                            onClick={() => runCode(pyodide, code1, setOutput1, setIsRunning1)}
                             disabled={isRunning1}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -344,7 +295,7 @@ plt.show()
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code2, setOutput2, setIsRunning2)}
+                            onClick={() => runCode(pyodide, code2, setOutput2, setIsRunning2)}
                             disabled={isRunning2}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -379,7 +330,7 @@ plt.show()
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code3, setOutput3, setIsRunning3)}
+                            onClick={() => runCode(pyodide, code3, setOutput3, setIsRunning3)}
                             disabled={isRunning3}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -418,7 +369,7 @@ plt.show()
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code4, setOutput4, setIsRunning4)}
+                            onClick={() => runCode(pyodide, code4, setOutput4, setIsRunning4)}
                             disabled={isRunning4}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -449,7 +400,7 @@ plt.show()
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code5, setOutput5, setIsRunning5)}
+                            onClick={() => runCode(pyodide, code5, setOutput5, setIsRunning5)}
                             disabled={isRunning5}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -480,7 +431,7 @@ plt.show()
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code6, setOutput6, setIsRunning6)}
+                            onClick={() => runCode(pyodide, code6, setOutput6, setIsRunning6)}
                             disabled={isRunning6}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
