@@ -15,31 +15,25 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
     const toggleGroup = (groupId: string) => {
         navigate(groupId);
         setSelectedItem(groupId);
-
         setExpandedGroups(prev => {
             const newState = { ...prev };
-
             const isParentOf = (parentId: string, childId: string) => {
                 return childId.startsWith(parentId + '/');
             };
-
             const isChildOf = (childId: string, parentId: string) => {
                 return childId.startsWith(parentId + '/');
             };
-
             Object.keys(prev).forEach(key => {
                 if (key !== groupId &&
                     !isParentOf(key, groupId) &&
                     !isChildOf(key, groupId)) {
                     const keyDepth = key.split('/').length;
                     const groupDepth = groupId.split('/').length;
-
                     if (keyDepth === groupDepth) {
                         newState[key] = false;
                     }
                 }
             });
-
             newState[groupId] = !prev[groupId];
             return newState;
         });
@@ -102,17 +96,43 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                     items: []
                 },
                 {
+                    id: 'machine-learning/cost-function',
+                    title: 'Cost Function',
+                    items: [
+                        {
+                            id: 'machine-learning/cost-function/mean-squared-error',
+                            title: 'Mean Squared Error',
+                        },
+                    ]
+                },
+                {
                     id: 'machine-learning/gradient-descent',
-                    title: 'Gradient descent',
+                    title: 'Gradient Descent',
                 },
             ]
         }
     ];
 
-    const renderItems = (items: any[]) => {
+    // Calculate depth based on ID structure
+    const getDepth = (id: string) => {
+        return id.split('/').length - 1;
+    };
+
+    // Get indentation with overflow protection
+    const getIndentation = (depth: number) => {
+        // Cap maximum indentation to prevent overflow
+        const maxDepth = 4;
+        const effectiveDepth = Math.min(depth, maxDepth);
+        return effectiveDepth * 16; // 16px per level
+    };
+
+    const renderItems = (items: any[], parentDepth: number = 0) => {
         return items.map((item, index) => {
+            const currentDepth = parentDepth + 1;
+            const indentationPx = getIndentation(currentDepth);
+
             if (!item.items) {
-                // Leaf item - no indentation
+                // Leaf item with indentation
                 return (
                     <button
                         key={index}
@@ -121,30 +141,32 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                             console.log(item.id);
                             setSelectedItem(item.id);
                         }}
-                        className={`w-full text-left p-2 rounded-md text-gray-800 hover:bg-gray-200 transition-colors text-sm whitespace-nowrap ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
+                        className={`w-full text-left p-2 rounded-md text-gray-800 hover:bg-gray-200 transition-colors text-sm ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
+                        style={{ paddingLeft: `${indentationPx + 8}px` }}
                     >
-                        {item.title}
+                        <span className="truncate block">{item.title}</span>
                     </button>
                 );
             } else {
-                // Folder item - no indentation
+                // Folder item with indentation
                 const isExpanded = expandedGroups[item.id];
                 return (
                     <div key={item.id} className="space-y-1">
                         <button
                             onClick={() => toggleGroup(item.id)}
-                            className={`w-full flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-gray-200 transition-colors ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
+                            className={`w-full flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-gray-200 transition-colors ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
+                            style={{ paddingLeft: `${indentationPx + 8}px` }}
                         >
-                            <span className="font-medium whitespace-nowrap text-sm">
+                            <span className="font-medium text-sm truncate">
                                 {item.title}
                             </span>
-                            <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${
+                            <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${
                                 isExpanded ? 'rotate-90' : ''
                             }`}/>
                         </button>
                         {isExpanded && item.items && (
                             <div className="space-y-1 animate-in slide-in-from-top-2 duration-200">
-                                {renderItems(item.items)}
+                                {renderItems(item.items, currentDepth)}
                             </div>
                         )}
                     </div>
@@ -170,6 +192,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                 className={`fixed left-0 top-0 h-full transition-all duration-300 ease-in-out z-40 overflow-hidden ${
                     isOpen ? 'w-80' : 'w-0'
                 }`}>
+
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-800">
                     <div className="w-full flex items-center justify-between">
@@ -190,29 +213,28 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                     {learningAreas.map((area) => {
                         const Icon = area.icon;
                         const isExpanded = expandedGroups[area.id];
-
                         return (
                             <div key={area.id} className="space-y-1">
-                                {/* Group Header */}
+                                {/* Group Header - No indentation for top level */}
                                 <button
                                     onClick={() => toggleGroup(area.id)}
                                     className={`w-full flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors ${selectedItem === area.id ? 'bg-gray-200' : ''}`}
                                 >
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 min-w-0">
                                         <Icon className="w-5 h-5 flex-shrink-0"/>
-                                        <span className="font-medium whitespace-nowrap">
-                                        {area.title}
-                                    </span>
+                                        <span className="font-medium truncate">
+                                            {area.title}
+                                        </span>
                                     </div>
-                                    <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${
+                                    <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${
                                         isExpanded ? 'rotate-90' : ''
                                     }`}/>
                                 </button>
 
                                 {/* Group Items */}
                                 {isExpanded && (
-                                    <div className=" space-y-1 animate-in slide-in-from-top-2 duration-200">
-                                        {renderItems(area.items)}
+                                    <div className="space-y-1 animate-in slide-in-from-top-2 duration-200">
+                                        {renderItems(area.items, 0)}
                                     </div>
                                 )}
                             </div>
