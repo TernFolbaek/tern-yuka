@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {PyodideInstance} from "../../../types/pyiodideTypes";
-
+import {runCode, loadPyodide} from "../../../services/pyodideService";
 
 const LinearRegression = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
@@ -11,65 +11,16 @@ const LinearRegression = () => {
     const [output1, setOutput1] = useState('');
     const [output2, setOutput2] = useState('');
     const [output3, setOutput3] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean | null>(true);
     const [isRunning1, setIsRunning1] = useState(false);
     const [isRunning2, setIsRunning2] = useState(false);
     const [isRunning3, setIsRunning3] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const loadPyodide = async () => {
-            try {
-                const pyodideModule = await (window as any).loadPyodide({
-                    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
-                });
-
-                // Load required packages
-                await pyodideModule.loadPackage(['numpy', 'matplotlib', 'scikit-learn']);
-
-                // Set up stdout capture and imports
-                pyodideModule.runPython(`
-                    import sys
-                    import numpy as np
-                    import matplotlib.pyplot as plt
-                    from io import StringIO
-                    from sklearn.linear_model import SGDRegressor
-                    from sklearn.preprocessing import StandardScaler 
-                    
-                `);
-
-                setPyodide(pyodideModule);
-                setLoading(false);
-            } catch (error) {
-                console.error('Failed to load Pyodide:', error);
-                setLoading(false);
-            }
-        };
-
-        loadPyodide();
+        loadPyodide(setLoading, setPyodide);
     }, []);
 
-    const runCode = async (code: string, setOutput: (output: string) => void, setIsRunning: (running: boolean) => void) => {
-        if (!pyodide) return;
-
-        setIsRunning(true);
-        try {
-            // Create new StringIO for this execution
-            pyodide.runPython(`
-                sys.stdout = StringIO()
-            `);
-
-            // Run user code (variables persist in global scope)
-            pyodide.runPython(code);
-
-            // Get output
-            const stdout = pyodide.runPython("sys.stdout.getvalue()");
-            setOutput(stdout || 'Code executed successfully (no output)');
-        } catch (error) {
-            setOutput(`Error: ${error}`);
-        }
-        setIsRunning(false);
-    };
 
     const resetPythonEnvironment = () => {
         if (!pyodide) return;
@@ -168,7 +119,7 @@ const LinearRegression = () => {
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code1, setOutput1, setIsRunning1)}
+                            onClick={() => runCode(pyodide, code1, setOutput1, setIsRunning1)}
                             disabled={isRunning1}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -204,7 +155,7 @@ const LinearRegression = () => {
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code2, setOutput2, setIsRunning2)}
+                            onClick={() => runCode(pyodide, code2, setOutput2, setIsRunning2)}
                             disabled={isRunning2}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
@@ -239,7 +190,7 @@ const LinearRegression = () => {
                             placeholder="Enter your Python code here..."
                         />
                         <button
-                            onClick={() => runCode(code3, setOutput3, setIsRunning3)}
+                            onClick={() => runCode(pyodide, code3, setOutput3, setIsRunning3)}
                             disabled={isRunning3}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
