@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {BlockMath, InlineMath} from 'react-katex';
 import CostFunctionSlope from '../../assets/cost-function-slope.webp'
-import {loadPyodide, runCode} from "../../services/pyiodideService";
+import {loadPyodide, runCode} from "../../services/pyodideService";
 
 const GradientDescent = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);

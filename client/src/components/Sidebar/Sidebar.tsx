@@ -11,13 +11,38 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
     const [selectedItem, setSelectedItem] = useState<string>('');
     const navigate = useNavigate();
+
     const toggleGroup = (groupId: string) => {
         navigate(groupId);
         setSelectedItem(groupId);
-        setExpandedGroups(prev => ({
-            ...prev,
-            [groupId]: !prev[groupId]
-        }));
+
+        setExpandedGroups(prev => {
+            const newState = { ...prev };
+
+            const isParentOf = (parentId: string, childId: string) => {
+                return childId.startsWith(parentId + '/');
+            };
+
+            const isChildOf = (childId: string, parentId: string) => {
+                return childId.startsWith(parentId + '/');
+            };
+
+            Object.keys(prev).forEach(key => {
+                if (key !== groupId &&
+                    !isParentOf(key, groupId) &&
+                    !isChildOf(key, groupId)) {
+                    const keyDepth = key.split('/').length;
+                    const groupDepth = groupId.split('/').length;
+
+                    if (keyDepth === groupDepth) {
+                        newState[key] = false;
+                    }
+                }
+            });
+
+            newState[groupId] = !prev[groupId];
+            return newState;
+        });
     };
 
     const learningAreas = [
@@ -84,10 +109,10 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
         }
     ];
 
-    const renderItems = (items: any[], level: number = 0) => {
+    const renderItems = (items: any[]) => {
         return items.map((item, index) => {
             if (!item.items) {
-                // Leaf item
+                // Leaf item - no indentation
                 return (
                     <button
                         key={index}
@@ -97,20 +122,18 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                             setSelectedItem(item.id);
                         }}
                         className={`w-full text-left p-2 rounded-md text-gray-800 hover:bg-gray-200 transition-colors text-sm whitespace-nowrap ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
-                        style={{marginLeft: `${level * 20}px`}}
                     >
                         {item.title}
                     </button>
                 );
             } else {
-                // Folder item
+                // Folder item - no indentation
                 const isExpanded = expandedGroups[item.id];
                 return (
                     <div key={item.id} className="space-y-1">
                         <button
                             onClick={() => toggleGroup(item.id)}
                             className={`w-full flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-gray-200 transition-colors ${selectedItem === item.id ? 'bg-gray-200' : ''}`}
-                            style={{marginLeft: `${level * 20}px`}}
                         >
                             <span className="font-medium whitespace-nowrap text-sm">
                                 {item.title}
@@ -121,7 +144,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
                         </button>
                         {isExpanded && item.items && (
                             <div className="space-y-1 animate-in slide-in-from-top-2 duration-200">
-                                {renderItems(item.items, level + 1)}
+                                {renderItems(item.items)}
                             </div>
                         )}
                     </div>
@@ -188,7 +211,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, onToggle}) => {
 
                                 {/* Group Items */}
                                 {isExpanded && (
-                                    <div className="ml-8 space-y-1 animate-in slide-in-from-top-2 duration-200">
+                                    <div className=" space-y-1 animate-in slide-in-from-top-2 duration-200">
                                         {renderItems(area.items)}
                                     </div>
                                 )}
