@@ -1,13 +1,13 @@
 import {Routes, Route} from 'react-router-dom';
 import LinearAlgebraIntro from "./LinearAlgebraIntro";
-import Vectorization from "./Vectors/Vectorization";
+import VectorRoutes from "./Vectors/VectorRoutes";
 
 const LinearAlgebraRoutes = () => {
     return (
         <>
             <Routes>
                 <Route path="/" element={<LinearAlgebraIntro/>}/>
-                <Route path="/vectors/vectorization" element={<Vectorization/>}/>
+                <Route path="/vectors/*" element={<VectorRoutes/>}/>
             </Routes>
         </>
     )
