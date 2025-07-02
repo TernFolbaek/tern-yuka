@@ -310,7 +310,6 @@ plt.show()
                         </button>
                         {output1 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 1:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output1}
                                 </pre>
@@ -353,7 +352,6 @@ plt.show()
                         </button>
                         {output2 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output2}
                                 </pre>
@@ -389,7 +387,6 @@ plt.show()
                         </button>
                         {output3 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output3}
                                 </pre>
@@ -429,7 +426,6 @@ plt.show()
                         </button>
                         {output4 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output4}
                                 </pre>
@@ -461,7 +457,6 @@ plt.show()
                         </button>
                         {output5 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output5}
                                 </pre>
@@ -493,7 +488,6 @@ plt.show()
                         </button>
                         {output6 && (
                             <div>
-                                <h4 className="text-sm font-medium text-gray-700 mb-1">Output 2:</h4>
                                 <pre className="bg-gray-100 p-3 rounded-md text-sm overflow-x-auto">
                                     {output6}
                                 </pre>
