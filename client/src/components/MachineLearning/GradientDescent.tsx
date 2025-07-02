@@ -1,7 +1,7 @@
 import {PyodideInstance} from "../../types/pyiodideTypes";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {BlockMath} from 'react-katex';
+import {BlockMath, InlineMath} from 'react-katex';
 import CostFunctionSlope from '../../assets/cost-function-slope.webp'
 
 const GradientDescent = () => {
@@ -109,18 +109,18 @@ plt.show()
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        const loadPyodide = async () => {
-            try {
-                const pyodideModule = await (window as any).loadPyodide({
-                    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
-                });
 
-                // Load required packages
-                await pyodideModule.loadPackage(['numpy', 'matplotlib', 'scikit-learn']);
+    const loadPyodide = async () => {
+        try {
+            const pyodideModule = await (window as any).loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
+            });
 
-                // Set up stdout capture and imports
-                pyodideModule.runPython(`
+            // Load required packages
+            await pyodideModule.loadPackage(['numpy', 'matplotlib', 'scikit-learn']);
+
+            // Set up stdout capture and imports
+            pyodideModule.runPython(`
                     import sys
                     import numpy as np
                     from io import StringIO
@@ -130,14 +130,15 @@ plt.show()
                     import math
                 `);
 
-                setPyodide(pyodideModule);
-                setLoading(false);
-            } catch (error) {
-                console.error('Failed to load Pyodide:', error);
-                setLoading(false);
-            }
-        };
+            setPyodide(pyodideModule);
+            setLoading(false);
+        } catch (error) {
+            console.error('Failed to load Pyodide:', error);
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         loadPyodide();
     }, []);
 
@@ -150,6 +151,12 @@ plt.show()
                     del globals()[var]
         `);
         setOutput1('');
+        setOutput2('');
+        setOutput3('');
+        setOutput4('');
+        setOutput5('');
+        setOutput6('');
+        loadPyodide()
     };
 
     const runCode = async (code: string, setOutput: (output: string) => void, setIsRunning: (running: boolean) => void) => {
@@ -176,7 +183,7 @@ plt.show()
 
     return (
         <div>
-            <p className="tw-header">Gradient Descent</p>
+            <p className="tw-header sticky top-0 py-2  bg-opacity-70 bg-white">Gradient Descent</p>
             <p className="tw-subtitle">Gradient Descent is one of the most well known optimization techniques. Meaning,
                 it is used to reduce our cost function. This article will assume that you have already familiarized
                 yourself with the cost function. The cost function represents how accurate our model is. The higher the
@@ -240,8 +247,8 @@ plt.show()
                 to <strong className="font-extrabold">w</strong> and with respect to <strong
                 className="font-extrabold">b</strong>. This looks as follows:
             </p>
-            <BlockMath math="\frac{\delta J(w,b)^{(i)}}{\delta b} = (f_w,_b(x^{(i)}) - y^{(i)})"/>
-            <BlockMath math="\frac{\delta J(w,b)^{(i)}}{\delta w} = (f_w,_b(x^{(i)}) - y^{(i)})x_j ^{(i)}"/>
+            <BlockMath math="\frac{\delta J(w,b)}{\delta b} = (f_w,_b(x^{(i)}) - y^{(i)})"/>
+            <BlockMath math="\frac{\delta J(w,b)}{\delta w_j} = (f_w,_b(x^{(i)}) - y^{(i)})x_j ^{(i)}"/>
             <br/>
             <p className="tw-sub-header">Run Gradient Descent</p>
             <p className="tw-subtitle">
@@ -291,7 +298,7 @@ plt.show()
                         <textarea
                             value={code1}
                             onChange={(e) => setCode1(e.target.value)}
-                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full h-[180px]  p-1  border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
@@ -316,15 +323,25 @@ plt.show()
                     <div className="space-y-3">
                         <h3 className="tw-sub-header">Step 2: Compute the cost function </h3>
                         <ul className="list-disc list-inside space-y-1">
-                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
-                                respective features
+                            <li className="text-sm text-gray-600">The cost function is the mean of the loss of each
+                                training example.
                             </li>
-                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                            <li className="text-sm text-gray-600">First we calculate our prediction for the current
+                                training example: f_wb = np.dot(w, x[i]) + b
+                            </li>
+                            <li className="text-sm text-gray-600">We then find the cost by subtracting our prediction
+                                with the true value y, and squaring it: (f_wb - y[i])**2
+                            </li>
+                            <li className="text-sm text-gray-600">We accumulate this onto our cost</li>
+                            {/* EXPLAIN WHY THIS MAKES THE GRADIENT FUNCTION EASIER, MAYBE CREATE A GENERIC POP UP MODAL COMPONENT WITH INPUT VARIABLES*/}
+                            <li className="text-sm text-gray-600">At last we divide our cost by (2 * m), m being our
+                                training examples. It is multiplied by 2 to make our gradient computation simpler
+                            </li>
                         </ul>
                         <textarea
                             value={code2}
                             onChange={(e) => setCode2(e.target.value)}
-                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full h-[250px]  p-1  border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
@@ -348,15 +365,19 @@ plt.show()
                     <div className="space-y-3">
                         <h3 className="tw-sub-header">Step 3: Compute the gradient </h3>
                         <ul className="list-disc list-inside space-y-1">
-                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
-                                respective features
+                            <li className="text-sm text-gray-600">We now make use of our two gradient functions:
                             </li>
-                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                            <li><InlineMath math="\frac{\delta J(w,b)}{\delta b} = (f_w,_b(x^{(i)}) - y^{(i)})"/></li>
+                            <li><InlineMath
+                                math="\frac{\delta J(w,b)}{\delta w_j} = (f_w,_b(x^{(i)}) - y^{(i)})x_j ^{(i)}"/></li>
+                            <li className="text-sm text-gray-600">As you can see, w is subscripted with j, as we need to
+                                find the gradient with respect to each feature
+                            </li>
                         </ul>
                         <textarea
                             value={code3}
                             onChange={(e) => setCode3(e.target.value)}
-                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full h-[350px]  p-1  border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
@@ -378,17 +399,25 @@ plt.show()
 
                     {/* Fourth Code Block */}
                     <div className="space-y-3">
-                        <h3 className="tw-sub-header">Step 4: Compute the gradient </h3>
+                        <h3 className="tw-sub-header">Step 4: Run Gradient Descent </h3>
                         <ul className="list-disc list-inside space-y-1">
-                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
-                                respective features
+                            <li className="text-sm text-gray-600">We have two history variables so we can plot and print
+                                our progress through the descent
                             </li>
-                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                            <li className="text-sm text-gray-600">Focus on how we are iteratively updating our weights
+                                with our newfound gradient values:
+                            </li>
+                            <li className="text-sm text-gray-600">
+                                w = w - alpha * dj_dw
+                            </li>
+                            <li className="text-sm text-gray-600">
+                                b = b - alpha * dj_db
+                            </li>
                         </ul>
                         <textarea
                             value={code4}
                             onChange={(e) => setCode4(e.target.value)}
-                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full h-[850px]  p-1  border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
@@ -420,7 +449,7 @@ plt.show()
                         <textarea
                             value={code5}
                             onChange={(e) => setCode5(e.target.value)}
-                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full h-[230px] p-1 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
@@ -442,17 +471,17 @@ plt.show()
 
                     {/* Sixth Code Block */}
                     <div className="space-y-3">
-                        <h3 className="tw-sub-header">Step 6: Compute the gradient </h3>
+                        <h3 className="tw-sub-header">Step 6: Plot the descent </h3>
                         <ul className="list-disc list-inside space-y-1">
-                            <li className="text-sm text-gray-600">Variable x contains our training rows and their
-                                respective features
+                            <li className="text-sm text-gray-600">Plot 1: Cost function value and iteration step (start)
                             </li>
-                            <li className="text-sm text-gray-600">Variable y contains our target values</li>
+                            <li className="text-sm text-gray-600">Plot 2: Cost function value and iteration step (end)
+                            </li>
                         </ul>
                         <textarea
                             value={code6}
                             onChange={(e) => setCode6(e.target.value)}
-                            className="w-full h-[180px] p-3 border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full h-[250px]  p-1  border border-gray-300 rounded-md font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your Python code here..."
                         />
                         <button
