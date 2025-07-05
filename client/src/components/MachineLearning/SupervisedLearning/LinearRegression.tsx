@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {PyodideInstance} from "../../../types/pyiodideTypes";
-import {runCode, loadPyodide} from "../../../services/pyodideService";
+import {runCode, loadPyodide, abortPyodideLoading} from "../../../services/pyodideService";
 
 const LinearRegression = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
@@ -17,10 +17,29 @@ const LinearRegression = () => {
     const [isRunning3, setIsRunning3] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        loadPyodide(setLoading, setPyodide);
-    }, []);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
+    useEffect(()=>{
+        abortControllerRef.current = new AbortController();
+        const loadPyodideWithAbort = async () => {
+            try {
+                await loadPyodide(setLoading, setPyodide, abortControllerRef.current!.signal);
+            } catch (error){
+                if(!abortControllerRef.current!.signal.aborted){
+                    console.error("Pyodide loading failed: ", error);
+                }
+            }
+        }
+
+        loadPyodideWithAbort();
+        return () => {
+            if(abortControllerRef.current){
+                abortControllerRef.current?.abort();
+                abortControllerRef.current = null;
+            }
+            abortPyodideLoading();
+        }
+    },[])
 
     const resetPythonEnvironment = () => {
         if (!pyodide) return;

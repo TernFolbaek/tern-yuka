@@ -1,9 +1,9 @@
 import {PyodideInstance} from "../../types/pyiodideTypes";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {BlockMath, InlineMath} from 'react-katex';
 import CostFunctionSlope from '../../assets/cost-function-slope.webp'
-import {loadPyodide, runCode} from "../../services/pyodideService";
+import {loadPyodide, runCode, abortPyodideLoading} from "../../services/pyodideService";
 
 const GradientDescent = () => {
     const [pyodide, setPyodide] = useState<PyodideInstance | null>(null);
@@ -111,9 +111,29 @@ plt.show()
 
     const [loading, setLoading] = useState<boolean | null>(true);
 
-    useEffect(() => {
-        loadPyodide(setLoading, setPyodide)
-    }, []);
+    const abortControllerRef = useRef<AbortController | null>(null);
+
+    useEffect(()=>{
+        abortControllerRef.current = new AbortController();
+        const loadPyodideWithAbort = async () => {
+            try {
+                await loadPyodide(setLoading, setPyodide, abortControllerRef.current!.signal);
+            } catch (error){
+                if(!abortControllerRef.current!.signal.aborted){
+                    console.error("Pyodide loading failed: ", error);
+                }
+            }
+        }
+
+        loadPyodideWithAbort();
+        return () => {
+            if(abortControllerRef.current){
+                abortControllerRef.current?.abort();
+                abortControllerRef.current = null;
+            }
+            abortPyodideLoading();
+        }
+    },[])
 
     const resetPythonEnvironment = () => {
         if (!pyodide) return;
